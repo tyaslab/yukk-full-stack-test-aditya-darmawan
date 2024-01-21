@@ -19,7 +19,7 @@ This repository is a coding test, based on Laravel, Breeze Starter Kit, Inertia,
 - Run `npm run dev` to run react
 - Run `php artisan serve` to run server
 
-Then access http://localhost:8000
+Then access http://localhost:8000/dashboard
 
 ## Run with sail
 Or, you can run sail (also pronounced as "docker-compose") but stil need to `composer install`

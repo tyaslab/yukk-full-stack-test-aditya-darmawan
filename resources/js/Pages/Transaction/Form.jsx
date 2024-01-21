@@ -1,9 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
 import { Head, useForm, router } from '@inertiajs/react';
+import { thousandSep } from '@/utils/templateUtil';
 
-export default function TransasctionForm({ auth, errors, newReference }) {
-    const { data, setData, post, processing } = useForm({
+export default function TransasctionForm({ auth, errors, newReference, balance }) {
+    const { data, setData, processing } = useForm({
         transaction_type: 'D',
         amount: 0,
         reference: newReference,
@@ -13,6 +14,10 @@ export default function TransasctionForm({ auth, errors, newReference }) {
 
     const onFormSubmit = (e) => {
         e.preventDefault()
+        if (transaction_type === 'D') {
+            setData('receipt', null)
+        }
+
         router.post(route('transaction.add'), data, {forceFormData: true})
     }
 
@@ -42,16 +47,19 @@ export default function TransasctionForm({ auth, errors, newReference }) {
                             </div>
 
                             <div className="mb-5">
-                                <label htmlFor="amount">Amount</label>
+                                <label htmlFor="amount">Amount (Your balance: {thousandSep(balance)})</label>
                                 <input type="text" id="note" name="amount" placeholder="Enter amount" value={data.amount} onChange={(e) => setData('amount', e.target.value)} />
                                 <InputError message={errors.amount} className="mt-2" />
+                                {data.transaction_type === 'D' && data.amount > balance && <InputError message="Insufficient balance" className="mt-2" />}
                             </div>
 
-                            <div className="mb-5">
-                                <label htmlFor="topup">Upload Receipt</label>
-                                <input id="topup" type="file" name="receipt" onChange={(e) => setData('receipt', e.target.files[0])} />
-                                <InputError message={errors.receipt} className="mt-2" />
-                            </div>
+                            { data.transaction_type === 'C' &&
+                                <div className="mb-5">
+                                    <label htmlFor="topup">Upload Receipt</label>
+                                    <input id="topup" type="file" name="receipt" onChange={(e) => setData('receipt', e.target.files[0])} />
+                                    <InputError message={errors.receipt} className="mt-2" />
+                                </div>
+                            }
 
                             <div className="mb-5">
                                 <label htmlFor="amount">Note</label>
@@ -60,7 +68,7 @@ export default function TransasctionForm({ auth, errors, newReference }) {
                             </div>
 
                             <div className="mb-5">
-                                <button type="submit" className=" btn btn-primary" disabled={processing}>Save</button>
+                                <button type="submit" className="btn btn-primary" disabled={processing || (data.transaction_type === 'D' && data.amount > balance)}>Save</button>
                             </div>
                         </form>
                     </div>

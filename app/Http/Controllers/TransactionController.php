@@ -43,10 +43,18 @@ class TransactionController extends Controller
 
     public function formAdd(): Response
     {
-        
+     
+        $balance = Balance::where('user_id', auth()->user()->id)->first();
+        if (!$balance) {
+            $balance = 0;
+        } else {
+            $balance = $balance->balance;
+        }
+
         $newReference = Uuid::uuid4();
         return Inertia::render('Transaction/Form', [
-            'newReference' => $newReference
+            'newReference' => $newReference,
+            'balance' => $balance
         ]);
     }
 
