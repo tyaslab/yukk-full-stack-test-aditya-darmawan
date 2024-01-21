@@ -3,7 +3,12 @@ import { Head, Link, router } from '@inertiajs/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
-export default function TransasctionList({ auth, transactionList, balance }) {
+var searchTimeout = null
+
+export default function TransasctionList({ auth, transactionList, balance, term, ...props }) {
+    console.log(transactionList.current_page)
+    const [searchQuery, setSearchQuery] = useState(term)
+
     const renderPageItem = (pageItem) => {
         if (pageItem.includes("Next")) {
             return "Next";
@@ -13,6 +18,16 @@ export default function TransasctionList({ auth, transactionList, balance }) {
 
         return pageItem;
     }
+
+    useEffect(() => {
+        clearTimeout(searchTimeout)
+        if (searchQuery !== term) {
+            searchTimeout = setTimeout(() => {
+                router.replace(`/transaction?term=${searchQuery}`)
+            }, 500)
+            
+        }
+    }, [searchQuery]);
 
     return (
         <AuthenticatedLayout
@@ -26,7 +41,7 @@ export default function TransasctionList({ auth, transactionList, balance }) {
                     <div className="content">
                         <h3 className="font-bold text-2xl mb-4">My Balance: {balance}</h3>
                         <a href={route('transaction.add')} className="inline-block btn btn-primary mb-4">Add Transaction</a>
-                        <input type="text" id="note" placeholder="Search transaction..." onChange={e => setSearchQuery(e.target.value)} />
+                        <input type="text" id="note" placeholder="Search transaction..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
                     </div>
 
                     <div className="transactionList">

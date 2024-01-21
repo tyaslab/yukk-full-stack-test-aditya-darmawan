@@ -17,7 +17,16 @@ class TransactionController extends Controller
 {
     public function index(): Response
     {
-        $transactionList = Transaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(config('app.limit_per_page', 20));
+        $transactionList = Transaction::where('user_id', auth()->user()->id);
+        
+        $term = request()->query('term');
+
+        if ($term) {
+            $transactionList = $transactionList->where('reference', 'ilike', '%' . $term . '%');
+        }
+
+        $transactionList = $transactionList->orderBy('created_at', 'desc')->paginate(config('app.limit_per_page', 20));
+
         $balance = Balance::where('user_id', auth()->user()->id)->first();
         if (!$balance) {
             $balance = 0;
@@ -26,6 +35,7 @@ class TransactionController extends Controller
         }
 
         return Inertia::render('Transaction/List', [
+            'term' => $term,
             'balance' => $balance,
             'transactionList' => $transactionList
         ]);
