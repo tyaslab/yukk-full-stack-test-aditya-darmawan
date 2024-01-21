@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import classNames from 'classnames';
 
-export default function TransasctionList({ auth, transactionList }) {
+export default function TransasctionList({ auth, transactionList, balance }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -13,7 +13,7 @@ export default function TransasctionList({ auth, transactionList }) {
             <div className="py-12">
                 <div className="card">
                     <div className="content">
-                        <h3 className="font-bold text-2xl mb-4">My Balance: Rp. 10.000</h3>
+                        <h3 className="font-bold text-2xl mb-4">My Balance: {balance}</h3>
 
                         <input type="text" id="note" placeholder="Search transaction..." />
                     </div>
