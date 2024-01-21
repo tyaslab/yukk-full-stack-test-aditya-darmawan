@@ -29,6 +29,14 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/transaction', function () {
+    return Inertia::render('Transaction/List');
+})->middleware(['auth', 'verified'])->name('transaction');
+
+Route::get('/transaction/add', function () {
+    return Inertia::render('Transaction/Form');
+})->middleware(['auth', 'verified'])->name('transaction.add');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
