@@ -12,6 +12,14 @@ use Inertia\Response;
 
 class TransactionController extends Controller
 {
+    public function index(): Response
+    {
+        $transactionList = Transaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return Inertia::render('Transaction/List', [
+            'transactionList' => $transactionList
+        ]);
+    }
+
     public function add(TransactionAddRequest $request): RedirectResponse
     {
 

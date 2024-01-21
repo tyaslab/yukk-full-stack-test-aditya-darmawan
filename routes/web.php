@@ -30,9 +30,9 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/transaction', function () {
-    return Inertia::render('Transaction/List');
-})->middleware(['auth', 'verified'])->name('transaction');
+Route::get('/transaction', [
+    TransactionController::class, 'index'
+])->middleware(['auth', 'verified'])->name('transaction');
 
 Route::get('/transaction/add', function () {
     return Inertia::render('Transaction/Form');

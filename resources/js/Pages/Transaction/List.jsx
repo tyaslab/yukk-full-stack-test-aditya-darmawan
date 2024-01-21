@@ -1,7 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import classNames from 'classnames';
 
-export default function TransasctionList({ auth }) {
+export default function TransasctionList({ auth, transactionList }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -9,9 +10,7 @@ export default function TransasctionList({ auth }) {
         >
             <Head title="Transactions" />
 
-
             <div className="py-12">
-
                 <div className="card">
                     <div className="content">
                         <h3 className="font-bold text-2xl mb-4">My Balance: Rp. 10.000</h3>
@@ -19,18 +18,16 @@ export default function TransasctionList({ auth }) {
                         <input type="text" id="note" placeholder="Search transaction..." />
                     </div>
                     
-                    <div className="content">
-                        <h5 className="mb-2 text-lg font-bold tracking-tight">#786787678867</h5>
-                        <h5 className="mb-2 text-xl font-bold tracking-tight text-green-700">+Rp. 2.000.000</h5>
-                        <p className="font-normal text-gray-700 mb-1">Anda mendapatkan dana dari Bank BRI No. Rekening 3427864837684</p>
-                        <p className="text-xs">20 Mei 2024 10:00:00</p>
-                    </div>
-
-                    <div className="content">
-                        <h5 className="mb-2 text-lg font-bold tracking-tight">#786787678867</h5>
-                        <h5 className="mb-2 text-xl font-bold tracking-tight text-rose-700">-Rp. 2.000.000</h5>
-                        <p className="font-normal text-gray-700 mb-1">Pembayaran di TOKO EMAS ASLI LO</p>
-                        <p className="text-xs">20 Mei 2024 10:00:00</p>
+                    <div className="transactionList">
+                        {transactionList.map(transaction => (
+                            <div className="content">
+                            <h5 className="mb-2 text-lg font-bold tracking-tight">#{transaction.id}</h5>
+                            <h5 className={classNames({"mb-2 text-xl font-bold tracking-tight": true, "text-rose-700": transaction.transaction_type == "D", "text-green-700": transaction.transaction_type == "C"})}>{transaction.transaction_type === 'D' ? '-' : '+'} {transaction.amount}</h5>
+                            <p className="text-gray-700 mb-1">Ref: {transaction.reference}</p>
+                            <p className="text-gray-700 mb-1">Note: {transaction.note ? transaction.note : '-'}</p>
+                            <p className="text-xs">Created At: {transaction.created_at}</p>
+                        </div>
+                        ))}
                     </div>
                 </div>
 
