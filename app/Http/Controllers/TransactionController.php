@@ -22,7 +22,10 @@ class TransactionController extends Controller
         $term = request()->query('term');
 
         if ($term) {
-            $transactionList = $transactionList->where('reference', 'ilike', '%' . $term . '%');
+            $transactionList = $transactionList->where(function($query) use ($term) {
+                $query->where('reference', 'ilike', '%' . $term . '%')
+                ->orWhere('note', 'ilike', '%' . $term . '%');
+            });
         }
 
         $transactionList = $transactionList->orderBy('created_at', 'desc')->paginate(config('app.limit_per_page', 20));

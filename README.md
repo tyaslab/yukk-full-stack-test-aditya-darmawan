@@ -24,6 +24,20 @@ Then access http://localhost:8000/dashboard
 ## Run with sail
 Or, you can run sail (also pronounced as "docker-compose") but stil need to `composer install`
 
+## Checklist
+    v Buatlah halaman register & login
+    v Buatlah halaman transaksi
+    v pilih tipe, top up atau transaksi
+    v input amount
+    v input keterangan
+    v upload bukti top up (khusus topup)
+    v Setiap transaksi top up / transaksi memiliki kode transaksi
+    v Buatlah halaman riwayat saldo user
+    v pagination
+    v search (dapat dicari dengan kode transaksi/ keterangan transaksi)
+    v filter
+    v show current balanc
+
 ## TODO
 - Validate transaction to prevent transaction > balance (now validation is in frontend)
 - Implement clean architechture (repository pattern, service pattern)
