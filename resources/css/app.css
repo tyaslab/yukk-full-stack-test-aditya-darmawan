@@ -27,7 +27,7 @@ input[type=file] {
 }
 
 .card .content {
-    @apply block p-6 bg-white border border-gray-200 rounded-lg shadow mb-4;
+    @apply p-6 bg-white border border-gray-200 rounded-lg shadow mb-4;
 }
 
 .pagination ul {
@@ -36,4 +36,8 @@ input[type=file] {
 
 .pagination .pagination-number {
     @apply flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700;
+}
+
+.pagination .pagination-number.active {
+    @apply bg-blue-50;
 }

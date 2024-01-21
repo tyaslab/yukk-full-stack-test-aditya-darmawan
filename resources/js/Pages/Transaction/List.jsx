@@ -1,8 +1,19 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 export default function TransasctionList({ auth, transactionList, balance }) {
+    const renderPageItem = (pageItem) => {
+        if (pageItem.includes("Next")) {
+            return "Next";
+        } else if (pageItem.includes("Prev")) {
+            return "Prev";
+        }
+
+        return pageItem;
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -14,60 +25,49 @@ export default function TransasctionList({ auth, transactionList, balance }) {
                 <div className="card">
                     <div className="content">
                         <h3 className="font-bold text-2xl mb-4">My Balance: {balance}</h3>
-
-                        <input type="text" id="note" placeholder="Search transaction..." />
+                        <a href={route('transaction.add')} className="inline-block btn btn-primary mb-4">Add Transaction</a>
+                        <input type="text" id="note" placeholder="Search transaction..." onChange={e => setSearchQuery(e.target.value)} />
                     </div>
-                    
+
                     <div className="transactionList">
-                        {transactionList.map(transaction => (
-                            <div className="content">
-                            <h5 className="mb-2 text-lg font-bold tracking-tight">#{transaction.id}</h5>
-                            <h5 className={classNames({"mb-2 text-xl font-bold tracking-tight": true, "text-rose-700": transaction.transaction_type == "D", "text-green-700": transaction.transaction_type == "C"})}>{transaction.transaction_type === 'D' ? '-' : '+'} {transaction.amount}</h5>
-                            <p className="text-gray-700 mb-1">Ref: {transaction.reference}</p>
-                            <p className="text-gray-700 mb-1">Note: {transaction.note ? transaction.note : '-'}</p>
-                            <p className="text-xs">Created At: {transaction.created_at}</p>
-                        </div>
+                        {transactionList.data.map(transaction => (
+                            <div key={transaction.id} className="content flex">
+                                <div className="w-11/12">
+                                    <h5 className="mb-2 text-lg font-bold tracking-tight">#{transaction.id}</h5>
+                                    <h5 className={classNames({"mb-2 text-xl font-bold tracking-tight": true, "text-rose-700": transaction.transaction_type == "D", "text-green-700": transaction.transaction_type == "C"})}>{transaction.transaction_type === 'D' ? '-' : '+'} {transaction.amount}</h5>
+                                    <p className="text-gray-700 mb-1">Ref: {transaction.reference}</p>
+                                    <p className="text-gray-700 mb-1">Note: {transaction.note ? transaction.note : '-'}</p>
+                                    <p className="text-xs">Created At: {transaction.created_at}</p>
+                                </div>
+                                <div className="w-1/12">
+                                    <div className="aspect-square">
+                                        { transaction.receipt ? (
+                                            <a href={`/storage/receipt/${transaction.receipt}`} target="_blank">
+                                                <img className="w-full h-full object-contain" src={`/storage/receipt/${transaction.receipt}`} />
+                                            </a>
+                                        ) : null }
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
 
+                { transactionList.links && transactionList.links.length > 0 && (
                 <div className="card">
                     <nav className="pagination">
                         <ul>
-                            <li>
-                                <a href="#" className="pagination-number">
-                                    <span className="sr-only">Previous</span>
-                                    <svg className="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                                    </svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="pagination-number">1</a>
-                            </li>
-                            <li>
-                                <a href="#" className="pagination-number">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-current="page" className="pagination-number">3</a>
-                            </li>
-                            <li>
-                                <a href="#" className="pagination-number">4</a>
-                            </li>
-                            <li>
-                                <a href="#" className="pagination-number">5</a>
-                            </li>
-                            <li>
-                                <a href="#" className="pagination-number">
-                                    <span className="sr-only">Next</span>
-                                    <svg className="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                    </svg>
-                                </a>
-                            </li>
+                            { transactionList.links.map((pageItem) => (
+                                <li>
+                                    <a href={pageItem.url} className={classNames({"pagination-number": true, "active": pageItem.active})}>
+                                        {renderPageItem(pageItem.label)}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </nav>
                 </div>
+                ) }
             </div>
         </AuthenticatedLayout>
     );

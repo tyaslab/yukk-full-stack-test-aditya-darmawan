@@ -34,9 +34,9 @@ Route::get('/transaction', [
     TransactionController::class, 'index'
 ])->middleware(['auth', 'verified'])->name('transaction');
 
-Route::get('/transaction/add', function () {
-    return Inertia::render('Transaction/Form');
-})->middleware(['auth', 'verified'])->name('transaction.add');
+Route::get('/transaction/add', [
+    TransactionController::class, 'formAdd'
+])->middleware(['auth', 'verified'])->name('transaction.add');
 
 Route::post('/transaction/add', [
     TransactionController::class, 'add'

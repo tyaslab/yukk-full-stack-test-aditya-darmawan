@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Ramsey\Uuid\Uuid;
 use DB;
 
 class TransactionController extends Controller
 {
     public function index(): Response
     {
-        $transactionList = Transaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        $transactionList = Transaction::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(config('app.limit_per_page', 20));
         $balance = Balance::where('user_id', auth()->user()->id)->first();
         if (!$balance) {
             $balance = 0;
@@ -30,20 +31,31 @@ class TransactionController extends Controller
         ]);
     }
 
+    public function formAdd(): Response
+    {
+        
+        $newReference = Uuid::uuid4();
+        return Inertia::render('Transaction/Form', [
+            'newReference' => $newReference
+        ]);
+    }
+
+
     public function add(TransactionAddRequest $request): RedirectResponse
     {
-
-        // //upload image
-        // $image = $request->file('receipt');
-        // $image->storeAs('public/receipt', $image->hashName());
-
         $validData = $request->validated();
         $validData['user_id'] = auth()->user()->id;
 
-        // if ($validData->transaction_type == 'D') {
-        //     unset($validData->receipt);
-        // }
+        if ($validData['transaction_type'] == 'D') {
+            unset($validData['receipt']);
+        } else {
+            //upload image
+            $image = $request->file('receipt');
+            $image->storeAs('public/receipt', $image->hashName());
+            $validData['receipt'] = $image->hashName();
+        }
 
+        $validData['reference'] = strtolower($validData['reference']);
         Transaction::create($validData);
 
         // modify balance

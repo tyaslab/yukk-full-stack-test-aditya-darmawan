@@ -185,4 +185,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    "limit_per_page" => env("LIMIT_PER_PAGE")
+
 ];

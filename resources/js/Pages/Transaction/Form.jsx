@@ -2,21 +2,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
 import { Head, useForm, router } from '@inertiajs/react';
 
-const DEFAULT_DATA = {
-    transaction_type: 'D',
-    amount: 0,
-    reference: '',
-    receipt: null,
-    note: ''
-}
-
-export default function TransasctionForm({ auth, error: errorProp }) {
-    const { data, setData, post, processing, errors } = useForm(DEFAULT_DATA);
+export default function TransasctionForm({ auth, errors, newReference }) {
+    const { data, setData, post, processing } = useForm({
+        transaction_type: 'D',
+        amount: 0,
+        reference: newReference,
+        receipt: null,
+        note: ''
+    });
 
     const onFormSubmit = (e) => {
         e.preventDefault()
         router.post(route('transaction.add'), data, {forceFormData: true})
-        // post(route('transaction.add'))
     }
 
     return (
@@ -28,7 +25,14 @@ export default function TransasctionForm({ auth, error: errorProp }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">                    
                     <div className="block p-6 bg-white border border-gray-200 rounded-lg shadow mb-4">
+
                         <form onSubmit={onFormSubmit}>
+                            <div className="mb-5">
+                                <label htmlFor="note">Reference</label>
+                                <input type="text" id="note"name="reference" placeholder="Enter reference" value={data.reference} disabled />
+                                <InputError message={errors.reference} className="mt-2" />
+                            </div>
+
                             <div className="mb-5">
                                 <label htmlFor="transaction_type">Select transaction type</label>
                                 <select id="transaction_type" name="transaction_type" value={data.transaction_type}  onChange={(e) => setData('transaction_type', e.target.value)} >
@@ -44,16 +48,10 @@ export default function TransasctionForm({ auth, error: errorProp }) {
                             </div>
 
                             <div className="mb-5">
-                                <label htmlFor="note">Reference</label>
-                                <input type="text" id="note"name="reference" placeholder="Enter reference" value={data.reference} onChange={(e) => setData('reference', e.target.value)}  />
-                                <InputError message={errors.reference} className="mt-2" />
-                            </div>
-
-                            {/* <div className="mb-5">
                                 <label htmlFor="topup">Upload Receipt</label>
-                                <input id="topup" type="file" value={data.receipt} name="receipt" onChange={(e) => setData('receipt', e.target.files[0])} />
+                                <input id="topup" type="file" name="receipt" onChange={(e) => setData('receipt', e.target.files[0])} />
                                 <InputError message={errors.receipt} className="mt-2" />
-                            </div> */}
+                            </div>
 
                             <div className="mb-5">
                                 <label htmlFor="amount">Note</label>

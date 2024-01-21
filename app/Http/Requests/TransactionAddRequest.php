@@ -16,10 +16,10 @@ class TransactionAddRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transaction_type' => ['required', 'string', 'uppercase', Rule::in(['D', 'C'])],
+            'transaction_type' => ['required', 'string', Rule::in(['D', 'C'])],
             'amount' => ['required', 'integer', 'min:100'],
             'reference' => ['required', 'string', 'max:255'],
-            // 'receipt' => ['file', 'size:5120', Rule::requiredIf($this->user()->transaction_type == 'C')],
+            'receipt' => ['nullable', 'file', 'max:5120', 'required_if:transaction_type,C'],
             'note' => ['nullable', 'string', 'max:255']
         ];
     }
