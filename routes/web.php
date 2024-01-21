@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,10 @@ Route::get('/transaction', function () {
 Route::get('/transaction/add', function () {
     return Inertia::render('Transaction/Form');
 })->middleware(['auth', 'verified'])->name('transaction.add');
+
+Route::post('/transaction/add', [
+    TransactionController::class, 'add'
+])->middleware(['auth', 'verified'])->name('transaction.add');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

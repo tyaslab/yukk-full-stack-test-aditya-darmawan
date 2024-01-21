@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 
 const DEFAULT_DATA = {
     transaction_type: 'D',
@@ -10,12 +10,13 @@ const DEFAULT_DATA = {
     note: ''
 }
 
-export default function TransasctionForm({ auth }) {
+export default function TransasctionForm({ auth, error: errorProp }) {
     const { data, setData, post, processing, errors } = useForm(DEFAULT_DATA);
 
     const onFormSubmit = (e) => {
         e.preventDefault()
-        post(route('transaction.add'))
+        router.post(route('transaction.add'), data, {forceFormData: true})
+        // post(route('transaction.add'))
     }
 
     return (
@@ -30,7 +31,7 @@ export default function TransasctionForm({ auth }) {
                         <form onSubmit={onFormSubmit}>
                             <div className="mb-5">
                                 <label htmlFor="transaction_type">Select transaction type</label>
-                                <select id="transaction_type" value={data.transaction_type}  onChange={(e) => setData(prev => ({...prev, transaction_type: e.target.value}))} >
+                                <select id="transaction_type" name="transaction_type" value={data.transaction_type}  onChange={(e) => setData('transaction_type', e.target.value)} >
                                     <option value="C">Topup</option>
                                     <option value="D">Transaction</option>
                                 </select>
@@ -38,25 +39,25 @@ export default function TransasctionForm({ auth }) {
 
                             <div className="mb-5">
                                 <label htmlFor="amount">Amount</label>
-                                <input type="text" id="note" placeholder="Enter amount" value={data.amount} onChange={(e) => setData(prev => ({...prev, amount: e.target.value}))} />
+                                <input type="text" id="note" name="amount" placeholder="Enter amount" value={data.amount} onChange={(e) => setData('amount', e.target.value)} />
                                 <InputError message={errors.amount} className="mt-2" />
                             </div>
 
                             <div className="mb-5">
                                 <label htmlFor="note">Reference</label>
-                                <input type="text" id="note" placeholder="Enter reference" value={data.reference} onChange={(e) => setData(prev => ({...prev, reference: e.target.value}))}  />
+                                <input type="text" id="note"name="reference" placeholder="Enter reference" value={data.reference} onChange={(e) => setData('reference', e.target.value)}  />
                                 <InputError message={errors.reference} className="mt-2" />
                             </div>
 
-                            <div className="mb-5">
+                            {/* <div className="mb-5">
                                 <label htmlFor="topup">Upload Receipt</label>
-                                <input id="topup" type="file" />
+                                <input id="topup" type="file" value={data.receipt} name="receipt" onChange={(e) => setData('receipt', e.target.files[0])} />
                                 <InputError message={errors.receipt} className="mt-2" />
-                            </div>
+                            </div> */}
 
                             <div className="mb-5">
                                 <label htmlFor="amount">Note</label>
-                                <input type="text" id="note" placeholder="Enter note" value={data.note} onChange={(e) => setData(prev => ({...prev, note: e.target.value}))}  />
+                                <input type="text" id="note" name="note" placeholder="Enter note" value={data.note} onChange={(e) => setData('note', e.target.value)}  />
                                 <InputError message={errors.note} className="mt-2" />
                             </div>
 
