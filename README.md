@@ -36,7 +36,7 @@ Or, you can run sail (also pronounced as "docker-compose") but stil need to `com
     v pagination
     v search (dapat dicari dengan kode transaksi/ keterangan transaksi)
     v filter
-    v show current balanc
+    v show current balance
 
 ## TODO
 - Validate transaction to prevent transaction > balance (now validation is in frontend)
