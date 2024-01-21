@@ -1,3 +1,35 @@
+# Yukk Full Stack Test (Aditya Darmawan)
+
+## What is it?
+This repository is a coding test, based on Laravel, Breeze Starter Kit, Inertia, and React js.
+
+## Requirements
+- PHP 8.x
+- Laravel 10
+- Postgresql
+
+## How to run
+- Create a database in postgresql, let's say `yukk`
+- Copy `.env.example` to `.env`
+- Change based on your database configuration (must be **postgresql**)
+- Run `composer install` to install dependencies
+- Run `php artisan migrate` to migrate your database
+- Run `npm install` to install node modules
+- Run `npm run build` to build some js modules (In some cases it is not required)
+- Run `npm run dev` to run react
+- Run `php artisan serve` to run server
+
+Then access http://localhost:8000
+
+## Run with sail
+Or, you can run sail (also pronounced as "docker-compose") but stil need to `composer install`
+
+## TODO
+- Validate transaction to prevent transaction > balance
+- Cosmetics on frontend
+- Implement clean architechture (repository pattern, service pattern)
+- Testing (if only clean architechture is implemented)
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
