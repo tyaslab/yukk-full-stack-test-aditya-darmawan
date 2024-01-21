@@ -25,8 +25,7 @@ Then access http://localhost:8000/dashboard
 Or, you can run sail (also pronounced as "docker-compose") but stil need to `composer install`
 
 ## TODO
-- Validate transaction to prevent transaction > balance
-- Cosmetics on frontend
+- Validate transaction to prevent transaction > balance (now validation is in frontend)
 - Implement clean architechture (repository pattern, service pattern)
 - Testing (if only clean architechture is implemented)
 
